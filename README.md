@@ -100,10 +100,29 @@ npx eas-cli build -p android --profile production   # Play 제출용 AAB
 - 개인정보: 릴리스 INTERNET 권한 제거, `allowBackup=false` + dataExtractionRules, 알림 원문 미저장, `NotificationText.toString()` 마스킹
 - CI(GitHub Actions): 코어 Kotlin 테스트 + typecheck·lint·Jest
 
-**실행한 명령과 결과** — 아래 `검증 결과` 참고
+**실행한 명령과 실제 결과**
+
+| 명령 | 결과 |
+|---|---|
+|  (tools/core-jvm) | 통과 — 82개 |
+|  (Android 모듈, Robolectric 저장소 테스트 17개 포함) | 통과 — 99개 |
+|  (:dailyroll-native:lintDebug) | 오류 0, 경고 31(KTX 권장·하드코딩 문자열·작은 sp 등) |
+|  ·  · Unknown command: "test"
+
+
+Did you mean this?
+  npm test # Test a package
+To see a list of supported npm commands, run:
+  npm help | 통과 (Jest 12개) |
+|  | **성공** — APK 91MB, targetSdk 36 / compileSdk 37 |
+|  (preview APK) | INTERNET 권한 없음 확인, allowBackup=false·dataExtractionRules·리스너·위젯 포함 |
+| 로컬  (Windows) | 실패 — RN 서드파티 C++ 경로가 Windows 260자 제한 초과(코드 문제 아님). APK 는 EAS 로 빌드 |
+
+- 빌드 중 수정: expo-router 의 선택적 의존성 (Drawer 전용, 미사용)를 autolinking 에서 제외, 미사용  권한 제거
+- EAS 프로젝트:  (원격 키스토어 사용)
 
 **미완료 / 다음 우선순위**
 1. 실제 갤럭시 기기 QA(`docs/TESTING.md` 체크리스트) — 실제 알림 문구로 파서 fixture 보강, 패키지명 확정
-2. LedgerRepository(SQLite) 통합 테스트(Robolectric 또는 instrumentation) 추가
+2. Lint 경고 정리, 실기기에서 위젯 크기·다크 모드 확인 후 레이아웃 조정
 3. 정기구독 CRUD·D-3 알림(WorkManager, POST_NOTIFICATIONS 요청), CSV/JSON 내보내기
-4. 위젯 디자인 실기기 확인 후 조정, 앱 아이콘·스플래시 디자인
+4. 앱 아이콘·스플래시 디자인

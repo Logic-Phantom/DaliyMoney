@@ -9,10 +9,19 @@
 | 코어(JVM) | `npm run test:core` | 예산 계산·이력·인사이트·환불 매칭·제외 규칙·파서·날짜·중복·위젯 표시 규칙 (82개) |
 | 코어(Android) | `npm run test:native` | 위와 동일 테스트를 Android 라이브러리 모듈에서 실행 |
 | JS | `npm test` · `npm run typecheck` · `npm run lint` | 금액 포맷·문구 규칙, 타입, ESLint |
-| 빌드 | `npm run android:lint` · `npm run android:debug` | 네이티브 모듈 Lint, Debug APK |
+| 저장소 | `npm run test:native` | LedgerRepository(SQLite) Robolectric 통합 테스트 17개 |
+| 빌드 | `npm run android:lint` · `npm run eas:preview` | 네이티브 모듈 Lint, EAS APK |
 
 파서 fixture(`KakaoNotificationParserTest`)는 기획서 예시 기반 **가정 문자열**이다. 실제 기기에서 받은 알림(이름·카드번호 마스킹)을
 앱의 `설정 > 파싱 테스트`로 확인한 뒤 fixture 로 추가한다.
+
+## 2026-11-27 실행 결과
+
+- 코어 JVM 82개 통과 · Android 모듈 99개 통과(Robolectric 저장소 17개 포함) · Jest 12개 통과 · tsc/ESLint 통과
+- Android Lint(dailyroll-native) 오류 0 / 경고 31
+- EAS preview 빌드 성공, APK 권한 검사에서 INTERNET 없음 확인
+- 로컬 Windows assembleDebug 는 서드파티 C++ 경로 길이(260자) 문제로 실패 → APK 는 EAS 사용
+- 실기기 QA: **미수행**
 
 ## 실기기 QA 체크리스트 (Samsung Galaxy / One UI) — 아직 수행 전
 

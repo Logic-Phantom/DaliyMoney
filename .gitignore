@@ -43,3 +43,6 @@ local.properties
 tools/core-jvm/build/
 tools/core-jvm/.gradle/
 tools/core-jvm/.kotlin/
+
+# 받은 APK
+build-output/
