@@ -104,22 +104,16 @@ npx eas-cli build -p android --profile production   # Play 제출용 AAB
 
 | 명령 | 결과 |
 |---|---|
-|  (tools/core-jvm) | 통과 — 82개 |
-|  (Android 모듈, Robolectric 저장소 테스트 17개 포함) | 통과 — 99개 |
-|  (:dailyroll-native:lintDebug) | 오류 0, 경고 31(KTX 권장·하드코딩 문자열·작은 sp 등) |
-|  ·  · Unknown command: "test"
+| `npm run test:core` (tools/core-jvm) | 통과 — 82개 |
+| `npm run test:native` (Android 모듈, Robolectric 저장소 테스트 17개 포함) | 통과 — 99개 |
+| `npm run android:lint` (:dailyroll-native:lintDebug) | 오류 0, 경고 31(KTX 권장·하드코딩 문자열·작은 sp 등) |
+| `npm run typecheck` · `npm run lint` · `npm test` | 통과 (Jest 12개) |
+| `eas build -p android --profile preview` | **성공** — APK 91MB, targetSdk 36 / compileSdk 37 |
+| `aapt2 dump permissions` (preview APK) | INTERNET 권한 없음 확인, allowBackup=false·dataExtractionRules·리스너·위젯 포함 |
+| 로컬 `assembleDebug` (Windows) | 실패 — RN 서드파티 C++ 경로가 Windows 260자 제한 초과(코드 문제 아님). APK 는 EAS 로 빌드 |
 
-
-Did you mean this?
-  npm test # Test a package
-To see a list of supported npm commands, run:
-  npm help | 통과 (Jest 12개) |
-|  | **성공** — APK 91MB, targetSdk 36 / compileSdk 37 |
-|  (preview APK) | INTERNET 권한 없음 확인, allowBackup=false·dataExtractionRules·리스너·위젯 포함 |
-| 로컬  (Windows) | 실패 — RN 서드파티 C++ 경로가 Windows 260자 제한 초과(코드 문제 아님). APK 는 EAS 로 빌드 |
-
-- 빌드 중 수정: expo-router 의 선택적 의존성 (Drawer 전용, 미사용)를 autolinking 에서 제외, 미사용  권한 제거
-- EAS 프로젝트:  (원격 키스토어 사용)
+- 빌드 중 수정: expo-router 의 선택적 의존성 `react-native-gesture-handler`(Drawer 전용, 미사용)를 autolinking 에서 제외, 미사용 `POST_NOTIFICATIONS` 권한 제거
+- EAS 프로젝트: `@lcm2/dailyroll` (원격 키스토어 사용)
 
 **미완료 / 다음 우선순위**
 1. 실제 갤럭시 기기 QA(`docs/TESTING.md` 체크리스트) — 실제 알림 문구로 파서 fixture 보강, 패키지명 확정
