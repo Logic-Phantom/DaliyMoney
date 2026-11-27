@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="dailyroll_bg">#15171B</color>
+    <color name="dailyroll_surface">#202329</color>
+    <color name="dailyroll_text">#F3F4F6</color>
+    <color name="dailyroll_text_secondary">#A5ABB5</color>
+    <color name="dailyroll_good">#3CCB9F</color>
+    <color name="dailyroll_caution">#F0B04A</color>
+    <color name="dailyroll_over">#F27C82</color>
+    <color name="dailyroll_track">#343841</color>
+</resources>

@@ -1,0 +1,33 @@
+plugins {
+  id 'com.android.library'
+  id 'expo-module-gradle-plugin'
+}
+
+group = 'com.dailyroll.core'
+version = '0.1.0'
+
+android {
+  namespace "com.dailyroll.core"
+  defaultConfig {
+    versionCode 1
+    versionName "0.1.0"
+  }
+  testOptions {
+    unitTests {
+      // 도메인 테스트는 순수 Kotlin 이라 android.* 스텁이 필요 없지만, 실수로 호출해도 크래시 대신 기본값을 돌려준다.
+      returnDefaultValues = true
+    }
+  }
+  lint {
+    abortOnError true
+    warningsAsErrors false
+  }
+}
+
+dependencies {
+  // androidx.core(NotificationManagerCompat)는 expo-modules-core 가 api 로 노출한다.
+  testImplementation 'junit:junit:4.13.2'
+  // 저장소 통합 테스트(SQLite)용. 테스트에만 쓰이며 APK 에는 포함되지 않는다.
+  testImplementation 'org.robolectric:robolectric:4.18.1'
+  testImplementation 'androidx.test:core:1.7.0'
+}

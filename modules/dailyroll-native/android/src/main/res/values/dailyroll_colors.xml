@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- DailyRoll 디자인 토큰(초기 시안). 중립 배경 + 상태 포인트 1개 원칙 -->
+<resources>
+    <color name="dailyroll_bg">#F6F7F8</color>
+    <color name="dailyroll_surface">#FFFFFF</color>
+    <color name="dailyroll_text">#17191D</color>
+    <color name="dailyroll_text_secondary">#737984</color>
+    <color name="dailyroll_good">#12896A</color>
+    <color name="dailyroll_caution">#A86F0E</color>
+    <color name="dailyroll_over">#D2434B</color>
+    <color name="dailyroll_track">#E6E8EB</color>
+</resources>

@@ -1,0 +1,69 @@
+{
+  "name": "dailyroll",
+  "version": "0.1.0",
+  "main": "expo-router/entry",
+  "private": true,
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "start": "expo start --dev-client",
+    "android": "expo run:android",
+    "prebuild": "expo prebuild --platform android",
+    "lint": "expo lint",
+    "typecheck": "tsc --noEmit",
+    "test": "jest",
+    "test:native": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/android-build.ps1 :dailyroll-native:testDebugUnitTest",
+    "android:debug": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/android-build.ps1 assembleDebug",
+    "android:lint": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/android-build.ps1 :dailyroll-native:lintDebug",
+    "doctor": "expo-doctor",
+    "eas:preview": "eas build --platform android --profile preview",
+    "test:core": "cd tools/core-jvm && gradlew test --console=plain"
+  },
+  "dependencies": {
+    "dailyroll-native": "file:modules/dailyroll-native",
+    "expo": "~58.0.26",
+    "expo-build-properties": "~58.0.12",
+    "expo-constants": "~58.0.16",
+    "expo-linking": "~58.0.17",
+    "expo-router": "~58.0.32",
+    "expo-splash-screen": "~58.0.14",
+    "expo-status-bar": "~58.0.5",
+    "expo-system-ui": "~58.0.7",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "react-native": "0.88.1",
+    "react-native-safe-area-context": "~5.11.1",
+    "react-native-screens": "~4.30.1"
+  },
+  "devDependencies": {
+    "@types/jest": "30.0.0",
+    "@types/react": "~19.3.0",
+    "eslint": "^9.39.5",
+    "eslint-config-expo": "~58.0.4",
+    "jest": "~30.5.2",
+    "jest-expo": "~58.0.15",
+    "typescript": "~6.0.3"
+  },
+  "jest": {
+    "preset": "jest-expo",
+    "testMatch": [
+      "**/tests/**/*.test.ts"
+    ],
+    "moduleNameMapper": {
+      "^@/(.*)$": "<rootDir>/src/$1"
+    }
+  },
+  "expo": {
+    "doctor": {
+      "reactNativeDirectoryCheck": {
+        "listUnknownPackages": false
+      }
+    },
+    "autolinking": {
+      "exclude": [
+        "react-native-gesture-handler"
+      ]
+    }
+  }
+}

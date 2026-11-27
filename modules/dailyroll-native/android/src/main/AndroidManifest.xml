@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <application>
+        <!--
+          결제 알림 리스너. 사용자가 앱 안에서 목적·처리 항목을 확인하고 동의한 뒤
+          시스템 '알림 접근' 설정에서 직접 허용해야 동작한다.
+          허용 목록(카카오뱅크·카카오톡·삼성월렛) 외 알림은 읽지 않고 버린다.
+        -->
+        <service
+            android:name="com.dailyroll.core.service.PaymentNotificationListener"
+            android:exported="true"
+            android:label="@string/dailyroll_listener_label"
+            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
+            <intent-filter>
+                <action android:name="android.service.notification.NotificationListenerService" />
+            </intent-filter>
+        </service>
+
+        <!-- 홈 화면 위젯 -->
+        <receiver
+            android:name="com.dailyroll.core.widget.DailyRollWidgetProvider"
+            android:exported="true"
+            android:label="DailyRoll">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="android.intent.action.TIME_SET" />
+                <action android:name="android.intent.action.TIMEZONE_CHANGED" />
+                <action android:name="android.intent.action.DATE_CHANGED" />
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/dailyroll_widget_info" />
+        </receiver>
+    </application>
+</manifest>

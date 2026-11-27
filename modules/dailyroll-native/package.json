@@ -1,0 +1,9 @@
+{
+  "name": "dailyroll-native",
+  "version": "0.1.0",
+  "description": "DailyRoll Android 네이티브 코어: 결제 알림 리스너, 파서, 예산 원장(SQLite), 홈 화면 위젯",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "private": true,
+  "license": "MIT"
+}
