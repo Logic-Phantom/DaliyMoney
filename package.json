@@ -18,7 +18,8 @@
     "android:lint": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/android-build.ps1 :dailyroll-native:lintDebug",
     "doctor": "expo-doctor",
     "eas:preview": "eas build --platform android --profile preview",
-    "test:core": "cd tools/core-jvm && gradlew test --console=plain"
+    "test:core": "cd tools/core-jvm && gradlew test --console=plain",
+    "eas:production": "eas build --platform android --profile production"
   },
   "dependencies": {
     "dailyroll-native": "file:modules/dailyroll-native",

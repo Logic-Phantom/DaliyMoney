@@ -69,13 +69,27 @@ npx eas-cli build -p android --profile preview      # 설치용 APK (릴리스 �
 npx eas-cli build -p android --profile production   # Play 제출용 AAB
 ```
 
-처음 빌드할 때 EAS 가 프로젝트 ID 를 `app.json` 에 추가하고 키스토어 생성을 묻는다. Expo Go 에서는 네이티브 모듈이 없어 동작하지 않는다.
+EAS 프로젝트 `@lcm2/dailyroll` 이 `app.json` 에 연결되어 있고 서명 키스토어는 EAS 서버(원격 자격 증명)에 있다.
+Expo Go 에서는 네이티브 모듈이 없어 동작하지 않는다. Windows 로컬 APK 빌드는 서드파티 C++ 경로 길이(260자) 제한으로 실패하므로 APK 는 EAS 로 만든다.
 
 ## 지원 범위
 
 - Android 8.0(API 26) 이상, 우선 검증 기기 Samsung Galaxy / One UI
 - compileSdk 37 · targetSdk 36 (Expo SDK 58 / React Native 0.88 기본값, Google Play 요구 API 36 이상)
 - 알림 출처 허용 목록(실기기 검증 전 후보값): 카카오뱅크 `com.kakaobank.channel`, 카카오톡 `com.kakao.talk`, 삼성월렛 `com.samsung.android.spay`
+
+## 현재 상태 (2026-11-27 기준, v0.1.0)
+
+| 영역 | 상태 |
+|---|---|
+| 예산 엔진·원장·금고·스트릭·리포트 | ✅ 구현 + 테스트 통과 |
+| 결제 알림 파서·중복·취소 매칭 | ✅ 구현 + fixture 테스트 통과 · ⚠️ 실제 알림 문구 미검증 |
+| SQLite 저장소 | ✅ 구현 + Robolectric 통합 테스트 통과 |
+| 알림 리스너·권한 상태 | ✅ 구현 · ⚠️ 실기기 미검증 |
+| 홈 위젯(2x1·4x1·4x2) | ✅ 구현 · ⚠️ 갤럭시 홈 화면 미확인(완료로 보지 않음) |
+| 앱 화면(홈·리포트·설정·거래·금고·지출 입력·파싱 테스트) | ✅ 구현 · ⚠️ 실기기 UX 미확인 |
+| EAS preview APK | ✅ 빌드 성공 |
+| 정기구독 D-3 알림 · 내보내기/가져오기 | ⏳ 미구현(스키마만 준비) |
 
 ## 작업 내역
 
@@ -115,8 +129,37 @@ npx eas-cli build -p android --profile production   # Play 제출용 AAB
 - 빌드 중 수정: expo-router 의 선택적 의존성 `react-native-gesture-handler`(Drawer 전용, 미사용)를 autolinking 에서 제외, 미사용 `POST_NOTIFICATIONS` 권한 제거
 - EAS 프로젝트: `@lcm2/dailyroll` (원격 키스토어 사용)
 
-**미완료 / 다음 우선순위**
-1. 실제 갤럭시 기기 QA(`docs/TESTING.md` 체크리스트) — 실제 알림 문구로 파서 fixture 보강, 패키지명 확정
-2. Lint 경고 정리, 실기기에서 위젯 크기·다크 모드 확인 후 레이아웃 조정
-3. 정기구독 CRUD·D-3 알림(WorkManager, POST_NOTIFICATIONS 요청), CSV/JSON 내보내기
-4. 앱 아이콘·스플래시 디자인
+**미완료 항목과 원인**
+- 실기기 QA 전체 — 이 작업 환경에서 갤럭시 기기·실제 카카오뱅크 알림을 사용할 수 없음
+- 파서 규칙 확정 — 실제 알림 원문 샘플이 없어 기획서 예시를 fixture 로만 사용, 애매하면 `확인 필요`로 보내도록 구현
+- 정기구독 알림·내보내기 — P1/P2 범위로 이번 단계에서 제외
+
+## 앞으로 할 일 (로드맵)
+
+### 1단계 — 실기기 검증 (가장 먼저)
+- [ ] preview APK 를 갤럭시에 설치해 `docs/TESTING.md` 실기기 QA 체크리스트 수행
+- [ ] 실제 카카오뱅크·카카오톡 알림톡·삼성월렛 알림 문구를 `설정 > 파싱 테스트`로 확인하고(이름·카드번호 마스킹) 파서 fixture 추가
+- [ ] 허용 목록 패키지명(`com.kakaobank.channel` 등) 실기기에서 확정
+- [ ] 위젯 크기별(2x1·4x1·4x2) 잘림·라이트/다크·리사이즈 확인 후 레이아웃 조정
+- [ ] 알림 리스너 연결 끊김 빈도와 자정 갱신 지연 시간 기록, 필요하면 배터리 최적화 안내 문구 보강
+- [ ] `adb logcat` 으로 금액·가맹점이 로그에 남지 않는지 확인
+
+### 2단계 — P1 기능
+- [ ] 정기구독 CRUD 화면 + 결제 3일 전 알림(WorkManager, `POST_NOTIFICATIONS` 권한을 이때 추가·요청, 31일 결제일은 말일 처리)
+- [ ] 월간 리포트에서 날짜를 눌러 그날 거래 목록 보기
+- [ ] 거래 목록 전체 보기·검색(오늘 외 날짜)
+- [ ] 확인 필요 거래에서 원거래를 직접 골라 취소·환불 연결
+- [ ] 앱 아이콘·스플래시·위젯 미리보기 이미지 디자인
+- [ ] Android Lint 경고 31건 정리(하드코딩 문자열 → 리소스, KTX 확장 사용 등)
+
+### 3단계 — P2 (사용자 피드백 이후)
+- [ ] CSV/JSON 내보내기·가져오기(민감 정보 경고, 사용자가 저장 위치 선택)
+- [ ] 월말 잔액 이월·초과액 차감 정책 선택 옵션(계산 엔진은 정책 분리 구조로 준비됨)
+- [ ] 다른 카드사·은행 알림 포맷 추가(`NotificationSourceRegistry` 확장)
+- [ ] 주 예산·월 예산 등 다른 예산 모드, 카테고리 분류
+- [ ] 필요 시 DB 암호화 검토(라이브러리·키 관리·마이그레이션 영향 평가 후)
+
+### 출시 준비
+- [ ] Play 제출용 AAB 빌드: `npm run eas:production`
+- [ ] Google Play Data safety·개인정보 처리방침에 실제 데이터 처리 방식(기기 내 저장, 외부 전송 없음, 알림 접근 목적) 반영
+- [ ] 알림 접근 권한 사용 사유 심사 대응 문서 작성
